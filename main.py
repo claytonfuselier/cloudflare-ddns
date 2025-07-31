@@ -7,6 +7,7 @@ import smtplib
 import logging
 from logging.handlers import RotatingFileHandler
 from email.mime.text import MIMEText
+from notify import send_notifications
 
 CONFIG_FILE = "/config/config.yml"
 LOG_DIR = "/logs"
@@ -52,45 +53,6 @@ def get_public_ip():
     logger.error("All IP services failed.")
     sys.exit(1)
 
-def send_notifications(config, message):
-    notif = config.get("notifications", {})
-
-    if notif.get("email", {}).get("enabled"):
-        try:
-            smtp = notif["email"]
-            msg = MIMEText(message)
-            msg["Subject"] = "DDNS Update Notification"
-            msg["From"] = smtp["username"]
-            msg["To"] = smtp["to"]
-
-            with smtplib.SMTP(smtp["smtp_server"], smtp["smtp_port"]) as server:
-                server.starttls()
-                server.login(smtp["username"], smtp["password"])
-                server.send_message(msg)
-            logger.info("Email notification sent.")
-        except Exception as e:
-            logger.error(f"Email notification failed: {e}")
-
-    if notif.get("discord", {}).get("enabled"):
-        try:
-            discord = notif["discord"]
-            requests.post(discord["webhook_url"], json={"content": message})
-            logger.info("Discord notification sent.")
-        except Exception as e:
-            logger.error(f"Discord notification failed: {e}")
-
-    if notif.get("pushover", {}).get("enabled"):
-        try:
-            po = notif["pushover"]
-            requests.post("https://api.pushover.net/1/messages.json", data={
-                "token": po["token"],
-                "user": po["user"],
-                "message": message
-            })
-            logger.info("Pushover notification sent.")
-        except Exception as e:
-            logger.error(f"Pushover notification failed: {e}")
-
 def update_dns_record(config):
     cf = config["cloudflare"]
     current_ip = get_public_ip()
@@ -122,7 +84,7 @@ def update_dns_record(config):
     if resp["success"]:
         msg = f"DNS record updated: {existing_ip} → {current_ip}"
         logger.info(msg)
-        send_notifications(config, msg)
+        send_notifications(config, msg, logger)
     else:
         logger.error(f"Update failed: {resp}")
 

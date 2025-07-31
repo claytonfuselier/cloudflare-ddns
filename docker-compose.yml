@@ -1,0 +1,8 @@
+version: "3.8"
+services:
+  ddns:
+    image: ghcr.io/yourusername/cloudflare-ddns:latest
+    volumes:
+      - ./logs:/logs
+      - ./config:/config:ro
+    restart: always

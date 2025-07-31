@@ -1,7 +1,7 @@
 # ☁️ Cloudflare DDNS
 
 A no-nonsense, config-driven Dynamic DNS updater for Cloudflare.
-Runs in a Docker container, logs to file, and pings you when your IP changes — via email, Discord, or Pushover. Set it and forget it.
+Runs in a Docker container, logs to file, and pings you when your IP changes — via email, Discord, Pushover, Gotify, ntfy.sh, Slack, MQTT, or your own webhook.
 
 ## 🧠 Why?
 
@@ -31,7 +31,7 @@ cloudflare:
 
 notifications:
   email:
-    enabled: true
+    enabled: false
     smtp_server: "smtp.example.com"
     smtp_port: 587
     username: "you@example.com"
@@ -39,13 +39,50 @@ notifications:
     to: "recipient@example.com"
 
   discord:
-    enabled: true
+    enabled: false
     webhook_url: "https://discord.com/api/webhooks/..."
 
   pushover:
-    enabled: true
+    enabled: false
     token: "your_app_token"
     user: "your_user_key"
+
+  gotify:
+    enabled: false
+    url: "https://gotify.example.com"
+    token: "your_gotify_app_token"
+
+  ntfy:
+    enabled: false
+    topic: "your-topic"
+    url: "https://ntfy.sh"
+    user: "optional_username"
+    password: "optional_password"
+
+  slack:
+    enabled: false
+    webhook_url: "https://hooks.slack.com/services/..."
+
+  webhook:
+    enabled: false
+    url: "https://your-webhook-endpoint"
+    method: "POST"  # or GET
+    headers:
+      X-Custom-Header: "value"
+
+  http_post:
+    enabled: false
+    url: "https://your-custom-api-endpoint"
+    body:
+      key: "value"
+
+  mqtt:
+    enabled: false
+    host: "mqtt.example.com"
+    port: 1883
+    topic: "ddns/ip-change"
+    username: "mqtt_user"
+    password: "mqtt_password"
 ```
 
 <br>
@@ -84,6 +121,12 @@ Get notified when your public IP changes via:
 * 📧 Email (SMTP)
 * 💬 Discord Webhook
 * 📱 Pushover
+* 🌟 Gotify
+* 📃 ntfy.sh
+* 📤 Slack
+* 🛠️ Custom Webhook
+* 🔢 HTTP POST (with JSON body)
+* 📢 MQTT
 
 You can enable/disable any combination via the config file.
 Each method works independently — no dependencies between them.

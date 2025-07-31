@@ -1,0 +1,25 @@
+update_interval_seconds: 300
+
+cloudflare:
+  api_token: "your_token"
+  zone_id: "your_zone_id"
+  record_id: "your_record_id"
+  record_name: "home.example.com"
+
+notifications:
+  email:
+    enabled: true
+    smtp_server: "smtp.example.com"
+    smtp_port: 587
+    username: "you@example.com"
+    password: "your_password"
+    to: "recipient@example.com"
+
+  discord:
+    enabled: true
+    webhook_url: "https://discord.com/api/webhooks/..."
+
+  pushover:
+    enabled: true
+    token: "your_app_token"
+    user: "your_user_key"

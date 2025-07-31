@@ -1,4 +1,4 @@
-# ☁️ cloudflare-ddns
+# ☁️ Cloudflare DDNS
 
 A simple Dockerized dynamic DNS updater for Cloudflare with built-in logging, config file, and notifications via email, Discord, or Pushover.
 
@@ -37,16 +37,15 @@ notifications:
 ## 🐳 Running the container
 
 ```bash
-docker run   -v $(pwd)/logs:/logs   -v $(pwd)/config:/config:ro   ghcr.io/yourusername/cloudflare-ddns:latest
+docker run   -v $(pwd)/logs:/logs   -v $(pwd)/config:/config:ro   ghcr.io/claytonfuselier/cloudflare-ddns:latest
 ```
 
 ### Or via Docker Compose
 
 ```yaml
-version: "3.8"
 services:
-  ddns:
-    image: ghcr.io/yourusername/cloudflare-ddns:latest
+  cloudflare-ddns:
+    image: ghcr.io/claytonfuselier/cloudflare-ddns:latest
     volumes:
       - ./logs:/logs
       - ./config:/config:ro
